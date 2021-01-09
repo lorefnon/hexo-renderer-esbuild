@@ -1,6 +1,6 @@
-import * as esbuild from "esbuild";
 import Hexo from "hexo";
-import { once, extend, isEqual } from "lodash";
+import { extend, isEqual } from "lodash";
+import { getService } from "./service";
 
 const renderer = (ext: string) => {
   if (!ext.match(/^(j|t)sx?$/)) {
@@ -40,13 +40,5 @@ const renderer = (ext: string) => {
     return outputFile.text;
   };
 };
-
-const getService = once(async (hexo: Hexo) => {
-  const serviceP = esbuild.startService();
-  hexo.on("exit", async () => {
-    (await serviceP).stop();
-  });
-  return serviceP;
-});
 
 export default renderer;
